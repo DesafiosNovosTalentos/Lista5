@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
-use App\Models\Order;
+use App\Services\Orders\CreateOrderUseCase;
+use App\Domain\Orders\Dto\CreateOrderDTO;
 
 class OrderController extends Controller
 {
@@ -17,25 +18,20 @@ class OrderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrderRequest $request)
+    public function store(StoreOrderRequest $request, CreateOrderUseCase $useCase)
     {
-        //
-    }
+        $dto = new CreateOrderDTO('019ce441-b6d8-72d8-82cd-963bf42debea', $request->input('product_name'), $request->input('amount'),);
 
+        $order = $useCase->execute($dto);
+
+        return response()->json($order->toArray(), 201);
+    }
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show(string $id)
     {
         //
     }
@@ -43,7 +39,7 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $order)
+    public function edit(string $id)
     {
         //
     }
@@ -51,7 +47,7 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function update(UpdateOrderRequest $request, string $id)
     {
         //
     }
@@ -59,7 +55,7 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function destroy(string $id)
     {
         //
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Orders\Enum;
+namespace App\Domain\Orders\Enums;
 
 enum OrderEnum: int
 {

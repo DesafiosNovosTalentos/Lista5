@@ -12,7 +12,11 @@ class NotificationLog extends Model
     use HasUuids, SoftDeletes;
 
     protected $fillable = [
+        'user_id',
+        'order_id',
         'message',
+        'status',
+        'attempts',
     ];
 
     public function user()
