@@ -4,8 +4,8 @@ namespace App\Domain\Orders\Entity;
 
 use App\Domain\Orders\Enums\OrderEnum;
 use DateTime;
-use Ramsey\Uuid\Uuid;
 use InvalidArgumentException;
+use Ramsey\Uuid\Uuid;
 
 class Order
 {
@@ -38,30 +38,37 @@ class Order
     {
         return $this->id;
     }
+
     public function getUserId(): string
     {
         return $this->userId;
     }
+
     public function getProductName(): string
     {
         return $this->productName;
     }
+
     public function getAmount(): int
     {
         return $this->amount;
     }
+
     public function getStatus(): OrderEnum
     {
         return $this->status;
     }
+
     public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
+
     public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
+
     public function getDeletedAt(): ?DateTime
     {
         return $this->deletedAt;
@@ -83,17 +90,23 @@ class Order
         $this->productName = $productName;
     }
 
+    public function update(string $productName, int $amount)
+    {
+        $this->setProductName($productName);
+        $this->setAmount($amount);
+    }
+
     public function toArray(): array
     {
         return [
-            'id'           => $this->id,
-            'user_id'      => $this->userId,
+            'id' => $this->id,
+            'user_id' => $this->userId,
             'product_name' => $this->productName,
-            'amount'       => $this->amount,
-            'status'       => $this->status->value,
-            'created_at'   => $this->createdAt?->format('Y-m-d H:i:s'),
-            'updated_at'   => $this->updatedAt?->format('Y-m-d H:i:s'),
-            'deleted_at'   => $this->deletedAt?->format('Y-m-d H:i:s'),
+            'amount' => $this->amount,
+            'status' => $this->status->value,
+            'created_at' => $this->createdAt?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updatedAt?->format('Y-m-d H:i:s'),
+            'deleted_at' => $this->deletedAt?->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -105,9 +118,9 @@ class Order
             $data['product_name'],
             $data['amount'],
             OrderEnum::from($data['status']),
-            $data['created_at'] ? new DateTime($data['created_at']) : null,
-            $data['updated_at'] ? new DateTime($data['updated_at']) : null,
-            $data['deleted_at'] ? new DateTime($data['deleted_at']) : null,
+            isset($data['created_at']) ? new DateTime($data['created_at']) : null,
+            isset($data['updated_at']) ? new DateTime($data['updated_at']) : null,
+            isset($data['deleted_at']) ? new DateTime($data['deleted_at']) : null,
         );
     }
 }

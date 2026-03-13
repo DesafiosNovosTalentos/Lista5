@@ -25,6 +25,6 @@ class ResendFailedNotifications extends Command
      */
     public function handle()
     {
-        $this->info("testando comando artisan");
+        $this->info('testando comando artisan');
     }
 }

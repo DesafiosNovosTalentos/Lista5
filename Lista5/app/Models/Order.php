@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use SoftDeletes;
+
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     protected $fillable = [

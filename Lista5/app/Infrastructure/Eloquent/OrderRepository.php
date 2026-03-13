@@ -2,74 +2,84 @@
 
 namespace App\Infrastructure\Eloquent;
 
-use App\Models\Order;
 use App\Domain\Orders\Entity\Order as DomainOrder;
 use App\Domain\Orders\Interfaces\OrderRepositoryInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Exceptions\RepositoryException;
+use App\Models\Order;
+use Illuminate\Database\QueryException;
 
 class OrderRepository implements OrderRepositoryInterface
 {
     public function save(DomainOrder $order): DomainOrder
     {
-        $model = Order::create([
-            'id'           => $order->getId(),
-            'user_id'      => $order->getUserId(),
-            'product_name' => $order->getProductName(),
-            'amount'       => $order->getAmount(),
-            'status'       => $order->getStatus()->value,
-        ]);
+        try {
+            $model = Order::create([
+                'id' => $order->getId(),
+                'user_id' => $order->getUserId(),
+                'product_name' => $order->getProductName(),
+                'amount' => $order->getAmount(),
+                'status' => $order->getStatus()->value,
+            ]);
 
-        return DomainOrder::fromArray($model->toArray());
+            return DomainOrder::fromArray($model->toArray());
+        } catch (QueryException) {
+            throw new RepositoryException('Falha ao salvar o pedido.');
+        }
     }
 
-    public function findById(string $id): DomainOrder
+    public function findById(string $id): ?DomainOrder
     {
-        $model = Order::find($id);
 
-        if (!$model) {
-            throw new ModelNotFoundException("Pedido {$id} não encontrado.");
+        try {
+            $model = Order::find($id);
+
+            if (!$model) {
+                return null;
+            }
+
+            return DomainOrder::fromArray($model->toArray());
+        } catch (QueryException) {
+            throw new RepositoryException('Falha ao consultar o pedido.');
         }
-
-        return DomainOrder::fromArray($model->toArray());
     }
 
     public function findAll(): array
     {
-        $orders = [];
+        try {
+            $orders = [];
 
-        foreach (Order::all() as $model) {
-            $orders[] = DomainOrder::fromArray($model->toArray());
+            foreach (Order::all() as $model) {
+                $orders[] = DomainOrder::fromArray($model->toArray());
+            }
+
+            return $orders;
+        } catch (QueryException) {
+            throw new RepositoryException('Falha ao consultar os pedidos.');
         }
-
-        return $orders;
     }
 
     public function update(DomainOrder $order): DomainOrder
     {
-        $model = Order::find($order->getId());
+        try {
+            Order::where('id', $order->getId())->update([
+                'user_id' => $order->getUserId(),
+                'product_name' => $order->getProductName(),
+                'amount' => $order->getAmount(),
+                'status' => $order->getStatus()->value,
+            ]);
 
-        if (!$model) {
-            throw new  ModelNotFoundException("Pedido {$order->getId()} não encontrado.");
+            return $order;
+        } catch (QueryException) {
+            throw new RepositoryException('Falha ao atualizar o pedido.');
         }
-
-        $model->update([
-            'user_id'      => $order->getUserId(),
-            'product_name' => $order->getProductName(),
-            'amount'       => $order->getAmount(),
-            'status'       => $order->getStatus()->value,
-        ]);
-
-        return DomainOrder::fromArray($model->fresh()->toArray());
     }
 
     public function delete(string $id): void
     {
-        $model = Order::find($id);
-
-        if (!$model) {
-            throw new  ModelNotFoundException("Pedido {$id} não encontrado.");
+        try {
+            Order::where('id', $id)->delete();
+        } catch (QueryException) {
+            throw new RepositoryException('Falha ao deletar o pedido.');
         }
-
-        $model->delete();
     }
 }

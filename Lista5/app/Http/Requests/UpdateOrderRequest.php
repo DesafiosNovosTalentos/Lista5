@@ -24,7 +24,7 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'product_name' => ['required', 'string'],
-            'amount'       => ['required', 'integer', 'min:1'],
+            'amount' => ['required', 'integer', 'min:1'],
         ];
     }
 }

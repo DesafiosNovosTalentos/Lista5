@@ -11,10 +11,12 @@ Route::prefix('/auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::prefix('/order')->group(function () {
-        Route::post('/', [OrderController::class, 'store']);
-        Route::get('/{id}',    [OrderController::class, 'show']);
-        Route::put('/{id}',    [OrderController::class, 'update']);
+    Route::prefix('/orders')->group(function () {
+        Route::post('/orders', [OrderController::class, 'store']);
+        Route::get('/orders', [OrderController::class, 'index']);
+        Route::get('/{id}', [OrderController::class, 'show']);
+        Route::put('/{id}', [OrderController::class, 'update']);
+        Route::delete('/{id}', [OrderController::class, 'delete']);
     });
 
     Route::prefix('auth')->group(function () {
