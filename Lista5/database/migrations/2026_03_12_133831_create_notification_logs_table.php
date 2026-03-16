@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignUuid('order_id')->constrained('orders');
             $table->text('message');
             $table->unsignedTinyInteger('status')->default(1);
-            $table->integer('attempts')->default(0);
+            $table->integer('attempts')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

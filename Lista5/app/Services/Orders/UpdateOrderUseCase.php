@@ -13,7 +13,7 @@ class UpdateOrderUseCase
 
     public function execute(UpdateOrderDTO $dto): Order
     {
-        $order = $this->order_repository->findById($dto->orderId);
+        $order = $this->order_repository->findById($dto->order_id);
 
         if ($order === null) {
             throw new EntityNotFoundException('Pedido não encontrado.');

@@ -3,28 +3,39 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Domain\NotificationLogs\Interfaces\NotificationLogRepositoryInterface;
+use App\Domain\Orders\Interfaces\OrderRepositoryInterface;
+use App\Jobs\SendOrderNotificationJob;
 
 class ResendFailedNotifications extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'notifications:retry-failed';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Testando comando';
+    public function handle(
+        NotificationLogRepositoryInterface $notificationRepository,
+        OrderRepositoryInterface $orderRepository,
+    ): void {
+        $failed = $notificationRepository->findFailed();
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
-    {
-        $this->info('testando comando artisan');
+        if (empty($failed)) {
+            $this->info('Nenhuma notificação com falha encontrada.');
+            return;
+        }
+
+        $this->info(count($failed) . ' notificação(ões) encontrada(s). Reenviando...');
+
+        foreach ($failed as $log) {
+            $order = $orderRepository->findById($log->getOrderId());
+
+            if ($order === null) {
+                $this->warn("Pedido {$log->getOrderId()} não encontrado. Pulando.");
+                continue;
+            }
+
+            SendOrderNotificationJob::dispatch($order);
+            $this->line("  → Job despachado para o pedido {$log->getOrderId()}");
+        }
+
+        $this->info('Concluído.');
     }
 }

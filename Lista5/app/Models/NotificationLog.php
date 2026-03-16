@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
-use App\Domain\NotificationLog\Enum\NotificationEnum;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Domain\NotificationLogs\Enum\NotificationEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NotificationLog extends Model
 {
-    use HasUuids, SoftDeletes;
+    use SoftDeletes;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'user_id',
         'order_id',
         'message',

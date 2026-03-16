@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\NotificationLog\Enum;
+namespace App\Domain\NotificationLogs\Enum;
 
 enum NotificationEnum: int
 {
