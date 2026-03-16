@@ -34,6 +34,28 @@ class Order
         );
     }
 
+    private function setAmount(int $amount): void
+    {
+        if ($amount <= 0) {
+            throw new InvalidArgumentException('O valor do pedido deve ser maior que zero.');
+        }
+        $this->amount = $amount;
+    }
+
+    private function setProductName(string $productName): void
+    {
+        if (empty(trim($productName))) {
+            throw new InvalidArgumentException('O nome do produto não pode ser vazio.');
+        }
+        $this->productName = $productName;
+    }
+
+    public function update(string $productName, int $amount)
+    {
+        $this->setProductName($productName);
+        $this->setAmount($amount);
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -74,28 +96,6 @@ class Order
         return $this->deletedAt;
     }
 
-    private function setAmount(int $amount): void
-    {
-        if ($amount <= 0) {
-            throw new InvalidArgumentException('O valor do pedido deve ser maior que zero.');
-        }
-        $this->amount = $amount;
-    }
-
-    private function setProductName(string $productName): void
-    {
-        if (empty(trim($productName))) {
-            throw new InvalidArgumentException('O nome do produto não pode ser vazio.');
-        }
-        $this->productName = $productName;
-    }
-
-    public function update(string $productName, int $amount)
-    {
-        $this->setProductName($productName);
-        $this->setAmount($amount);
-    }
-
     public function toArray(): array
     {
         return [
@@ -103,7 +103,7 @@ class Order
             'user_id' => $this->userId,
             'product_name' => $this->productName,
             'amount' => $this->amount,
-            'status' => $this->status->value,
+            'status' => $this->status->name,
             'created_at' => $this->createdAt?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->format('Y-m-d H:i:s'),
             'deleted_at' => $this->deletedAt?->format('Y-m-d H:i:s'),

@@ -2,11 +2,11 @@
 
 namespace App\Domain\Orders\Dto;
 
-class CreateOrderDTO
+readonly class CreateOrderDTO
 {
     public function __construct(
-        public readonly string $user_id,
-        public readonly string $product_name,
-        public readonly int $amount,
+        public string $user_id,
+        public string $product_name,
+        public int $amount,
     ) {}
 }

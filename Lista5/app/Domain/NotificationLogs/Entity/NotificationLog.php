@@ -4,6 +4,7 @@ namespace App\Domain\NotificationLogs\Entity;
 
 use App\Domain\NotificationLogs\Enum\NotificationEnum;
 use DateTime;
+use Ramsey\Uuid\Uuid;
 
 class NotificationLog
 {
@@ -20,6 +21,23 @@ class NotificationLog
 
     ) {
         $this->setMessage($message);
+    }
+
+    public static function createNew(
+        string $userId,
+        string $orderId,
+        string $message,
+        NotificationEnum $status,
+        int $attempts,
+    ): self {
+        return new self(
+            id: Uuid::uuid4()->toString(),
+            userId: $userId,
+            orderId: $orderId,
+            message: $message,
+            status: $status,
+            attempts: $attempts,
+        );
     }
 
     private function setMessage(string $message)
@@ -83,7 +101,7 @@ class NotificationLog
             'user_id' => $this->userId,
             'order_id' => $this->orderId,
             'message' => $this->message,
-            'status' => $this->status->value,
+            'status' => $this->status->name,
             'attempts' => $this->attempts,
             'created_at' => $this->createdAt?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updatedAt?->format('Y-m-d H:i:s'),

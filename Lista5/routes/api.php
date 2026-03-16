@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NotificationLogController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NotificationLogController;
 
 Route::prefix('/auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);

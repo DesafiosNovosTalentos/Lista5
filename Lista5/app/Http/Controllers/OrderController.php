@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Domain\Orders\Dto\CreateOrderDTO;
 use App\Domain\Orders\Dto\UpdateOrderDTO;
-use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
+use App\Http\Requests\Order\StoreOrderRequest;
+use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Services\Orders\CreateOrderUseCase;
 use App\Services\Orders\DeleteOrderUseCase;
 use App\Services\Orders\GetOrderUseCase;
@@ -30,7 +30,7 @@ class OrderController extends Controller
     {
 
         $dto = new CreateOrderDTO(
-            '019ce6e1-89aa-737d-b3fe-dea3e41d487e',
+            auth()->id(),
             $request->validated('product_name'),
             $request->validated('amount'),
         );

@@ -2,28 +2,25 @@
 
 namespace App\Infrastructure\Eloquent;
 
-use App\Domain\NotificationLogs\Dto\CreateNotificationLogDTO;
 use App\Domain\NotificationLogs\Entity\NotificationLog as DomainNotificationLog;
-use App\Domain\NotificationLogs\Interfaces\NotificationLogRepositoryInterface;
 use App\Domain\NotificationLogs\Enum\NotificationEnum;
-
+use App\Domain\NotificationLogs\Interfaces\NotificationLogRepositoryInterface;
 use App\Exceptions\RepositoryException;
 use App\Models\NotificationLog;
 use Illuminate\Database\QueryException;
-use Ramsey\Uuid\Uuid;
 
 class NotificationLogRepository implements NotificationLogRepositoryInterface
 {
-    public function save(CreateNotificationLogDTO $dto): DomainNotificationLog
+    public function save(DomainNotificationLog $notificationLog): DomainNotificationLog
     {
         try {
             $model = NotificationLog::create([
-                'id' => Uuid::uuid4()->toString(),
-                'user_id' => $dto->userId,
-                'order_id' => $dto->orderId,
-                'message' => $dto->message,
-                'status' => $dto->status,
-                'attempts' => $dto->attempts,
+                'id' => $notificationLog->getId(),
+                'user_id' => $notificationLog->getUserId(),
+                'order_id' => $notificationLog->getOrderId(),
+                'message' => $notificationLog->getMessage(),
+                'status' => $notificationLog->getStatus(),
+                'attempts' => $notificationLog->getAttempts(),
             ]);
 
             return DomainNotificationLog::fromArray($model->toArray());

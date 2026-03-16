@@ -11,13 +11,13 @@ class OrderNotificationMail extends Mailable
 {
     public function __construct(
         public readonly Order $order,
-        public readonly string $message,
+        public readonly string $notificationMessage,
     ) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pedido #' . $this->order->getId() . ' recebido',
+            subject: 'Pedido #'.$this->order->getId().' recebido',
         );
     }
 

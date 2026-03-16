@@ -11,6 +11,7 @@ class NotificationLog extends Model
     use SoftDeletes;
 
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     protected $fillable = [

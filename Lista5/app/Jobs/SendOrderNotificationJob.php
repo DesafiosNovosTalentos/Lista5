@@ -2,23 +2,22 @@
 
 namespace App\Jobs;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
-
-use App\Domain\NotificationLogs\Dto\CreateNotificationLogDTO;
+use App\Domain\NotificationLogs\Entity\NotificationLog as DomainNotificationLog;
 use App\Domain\NotificationLogs\Enum\NotificationEnum;
 use App\Domain\NotificationLogs\Interfaces\NotificationLogRepositoryInterface;
-
 use App\Domain\Orders\Entity\Order as DomainOrder;
 use App\Mail\OrderNotificationMail;
 use App\Models\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
 
 class SendOrderNotificationJob implements ShouldQueue
 {
     use Queueable;
 
-    public int $attempts = 3;
+    public int $tries = 3;
+
     public int $backoff = 60;
 
     public function __construct(private DomainOrder $order) {}
@@ -28,14 +27,14 @@ class SendOrderNotificationJob implements ShouldQueue
         $user = User::findOrFail($this->order->getUserId());
 
         $message = sprintf(
-            'Seu pedido para o produto "%s" no valor de R$ %d foi criado com sucesso.',
+            'Informamos que o pedido referente ao produto "%s" (quantidade: %d) foi registrado com sucesso em nosso sistema.',
             $this->order->getProductName(),
-            $this->order->getAmount(),
+            $this->order->getAmount()
         );
 
         Mail::to($user->email)->send(new OrderNotificationMail($this->order, $message));
 
-        $repository->save(new CreateNotificationLogDTO(
+        $repository->save(DomainNotificationLog::createNew(
             userId: $this->order->getUserId(),
             orderId: $this->order->getId(),
             message: $message,
@@ -46,14 +45,15 @@ class SendOrderNotificationJob implements ShouldQueue
 
     public function failed(\Throwable $e): void
     {
+
         $repository = app(NotificationLogRepositoryInterface::class);
 
-        $repository->save(new CreateNotificationLogDTO(
+        $repository->save(DomainNotificationLog::createNew(
             userId: $this->order->getUserId(),
             orderId: $this->order->getId(),
-            message: 'Falha ao enviar notificação: ' . $e->getMessage(),
+            message: 'Falha ao enviar notificação: '.$e->getMessage(),
             status: NotificationEnum::FAILED,
-            attempts: $this->attempts,
+            attempts: $this->attempts(),
         ));
     }
 }

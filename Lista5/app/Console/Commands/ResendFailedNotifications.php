@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Domain\NotificationLogs\Interfaces\NotificationLogRepositoryInterface;
 use App\Domain\Orders\Interfaces\OrderRepositoryInterface;
 use App\Jobs\SendOrderNotificationJob;
+use Illuminate\Console\Command;
 
 class ResendFailedNotifications extends Command
 {
@@ -19,16 +19,18 @@ class ResendFailedNotifications extends Command
 
         if (empty($failed)) {
             $this->info('Nenhuma notificação com falha encontrada.');
+
             return;
         }
 
-        $this->info(count($failed) . ' notificação(ões) encontrada(s). Reenviando...');
+        $this->info(count($failed).' notificação(ões) encontrada(s). Reenviando...');
 
         foreach ($failed as $log) {
             $order = $orderRepository->findById($log->getOrderId());
 
             if ($order === null) {
                 $this->warn("Pedido {$log->getOrderId()} não encontrado. Pulando.");
+
                 continue;
             }
 

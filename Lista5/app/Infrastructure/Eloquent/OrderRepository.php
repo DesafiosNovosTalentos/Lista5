@@ -18,7 +18,7 @@ class OrderRepository implements OrderRepositoryInterface
                 'user_id' => $order->getUserId(),
                 'product_name' => $order->getProductName(),
                 'amount' => $order->getAmount(),
-                'status' => $order->getStatus()->value,
+                'status' => $order->getStatus(),
             ]);
 
             return DomainOrder::fromArray($model->toArray());
@@ -33,7 +33,7 @@ class OrderRepository implements OrderRepositoryInterface
         try {
             $model = Order::find($id);
 
-            if (!$model) {
+            if (! $model) {
                 return null;
             }
 
@@ -65,7 +65,7 @@ class OrderRepository implements OrderRepositoryInterface
                 'user_id' => $order->getUserId(),
                 'product_name' => $order->getProductName(),
                 'amount' => $order->getAmount(),
-                'status' => $order->getStatus()->value,
+                'status' => $order->getStatus(),
             ]);
 
             return $order;

@@ -2,54 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Requests\Auth\LoginAuthRequest;
+use App\Http\Requests\Auth\RegisterAuthRequest;
+use App\Services\Auth\LoginUseCase;
+use App\Services\Auth\LogoutUseCase;
+use App\Services\Auth\RegisterUseCase;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function login() {}
-
-    public function register() {}
-
-    public function logout() {}
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function register(RegisterAuthRequest $request, RegisterUseCase $use_case)
     {
-        //
+        $data = $request->validated();
+        $response = $use_case->execute($data);
+
+        return response()->json($response, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function login(LoginAuthRequest $request, LoginUseCase $use_case)
     {
-        //
+        $data = $request->validated();
+        $response = $use_case->execute($data);
+
+        return response()->json($response, 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
+    public function logout(LogoutUseCase $use_case, Request $request)
     {
-        //
-    }
+        $use_case->execute($request->user());
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
+        return response()->json(null, 204);
     }
 }
