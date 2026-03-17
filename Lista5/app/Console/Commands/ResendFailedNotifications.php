@@ -11,6 +11,8 @@ class ResendFailedNotifications extends Command
 {
     protected $signature = 'notifications:retry-failed';
 
+    protected $description = 'Reenvia notificações com status failed';
+
     public function handle(
         NotificationLogRepositoryInterface $notificationRepository,
         OrderRepositoryInterface $orderRepository,
@@ -23,7 +25,7 @@ class ResendFailedNotifications extends Command
             return;
         }
 
-        $this->info(count($failed).' notificação(ões) encontrada(s). Reenviando...');
+        $this->info(count($failed) . ' notificação(ões) encontrada(s). Reenviando...');
 
         foreach ($failed as $log) {
             $order = $orderRepository->findById($log->getOrderId());
@@ -34,7 +36,8 @@ class ResendFailedNotifications extends Command
                 continue;
             }
 
-            SendOrderNotificationJob::dispatch($order);
+            SendOrderNotificationJob::dispatch($order, $log->getId());
+
             $this->line("  → Job despachado para o pedido {$log->getOrderId()}");
         }
 

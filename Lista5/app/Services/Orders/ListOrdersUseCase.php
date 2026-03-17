@@ -10,8 +10,6 @@ class ListOrdersUseCase
 
     public function execute()
     {
-        $orders = $this->order_repository->findAll();
-
-        return $orders;
+        return $this->order_repository->findAll();
     }
 }

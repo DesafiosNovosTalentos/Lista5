@@ -50,10 +50,20 @@ class Order
         $this->productName = $productName;
     }
 
-    public function update(string $productName, int $amount)
+    public function update(string $productName, int $amount): void
     {
         $this->setProductName($productName);
         $this->setAmount($amount);
+    }
+
+    public function setStatusProcessing(): void
+    {
+        $this->status = OrderEnum::PROCESSING;
+    }
+
+    public function setStatusCompleted(): void
+    {
+        $this->status = OrderEnum::COMPLETED;
     }
 
     public function getId(): string

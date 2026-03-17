@@ -17,7 +17,7 @@ class OrderNotificationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pedido #'.$this->order->getId().' recebido',
+            subject: 'Pedido #' . $this->order->getId() . ' recebido',
         );
     }
 

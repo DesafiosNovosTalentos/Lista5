@@ -48,6 +48,11 @@ class NotificationLog
         $this->message = $message;
     }
 
+    public function setStatusSent(): void
+    {
+        $this->status = NotificationEnum::SENT;
+    }
+
     public function getId(): string
     {
         return $this->id;

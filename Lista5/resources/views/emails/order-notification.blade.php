@@ -73,7 +73,7 @@
             <div class="order-box">
                 <p><strong>Produto:</strong> {{ $order->getProductName() }}</p>
                 <p><strong>Quantidade:</strong> {{ $order->getAmount() }}</p>
-                <p><strong>Status:</strong> {{ $order->getStatus()->name }}</p>
+                <p><strong>Status:</strong> {{ strtolower($order->getStatus()->name) }}</p>
             </div>
         </div>
         

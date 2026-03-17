@@ -11,4 +11,8 @@ interface NotificationLogRepositoryInterface
     public function findByUserId(string $userId): array;
 
     public function findFailed(): array;
+
+    public function findById(string $id): ?NotificationLog;
+
+    public function update(NotificationLog $notificationLog): NotificationLog;
 }
