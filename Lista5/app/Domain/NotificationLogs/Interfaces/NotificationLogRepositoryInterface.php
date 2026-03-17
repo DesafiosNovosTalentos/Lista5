@@ -14,5 +14,5 @@ interface NotificationLogRepositoryInterface
 
     public function findById(string $id): ?NotificationLog;
 
-    public function update(NotificationLog $notificationLog): NotificationLog;
+    public function update(NotificationLog $notification_log): NotificationLog;
 }

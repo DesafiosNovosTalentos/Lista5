@@ -27,7 +27,7 @@ class AuthController extends Controller
         return response()->json($response, 200);
     }
 
-    public function logout(LogoutUseCase $use_case, Request $request)
+    public function logout(Request $request, LogoutUseCase $use_case,)
     {
         $use_case->execute($request->user());
 

@@ -14,10 +14,10 @@ class ResendFailedNotifications extends Command
     protected $description = 'Reenvia notificações com status failed';
 
     public function handle(
-        NotificationLogRepositoryInterface $notificationRepository,
-        OrderRepositoryInterface $orderRepository,
+        NotificationLogRepositoryInterface $notification_repository,
+        OrderRepositoryInterface $order_repository,
     ): void {
-        $failed = $notificationRepository->findFailed();
+        $failed = $notification_repository->findFailed();
 
         if (empty($failed)) {
             $this->info('Nenhuma notificação com falha encontrada.');
@@ -28,7 +28,7 @@ class ResendFailedNotifications extends Command
         $this->info(count($failed) . ' notificação(ões) encontrada(s). Reenviando...');
 
         foreach ($failed as $log) {
-            $order = $orderRepository->findById($log->getOrderId());
+            $order = $order_repository->findById($log->getOrderId());
 
             if ($order === null) {
                 $this->warn("Pedido {$log->getOrderId()} não encontrado. Pulando.");
@@ -38,7 +38,7 @@ class ResendFailedNotifications extends Command
 
             SendOrderNotificationJob::dispatch($order, $log->getId());
 
-            $this->line("  → Job despachado para o pedido {$log->getOrderId()}");
+            $this->line("Job despachado para o pedido {$log->getOrderId()}");
         }
 
         $this->info('Concluído.');

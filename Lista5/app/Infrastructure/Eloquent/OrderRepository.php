@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Eloquent;
 
+use App\Domain\Orders\Dto\PaginatedOrdersDTO;
 use App\Domain\Orders\Entity\Order as DomainOrder;
 use App\Domain\Orders\Interfaces\OrderRepositoryInterface;
 use App\Exceptions\RepositoryException;
@@ -43,16 +44,26 @@ class OrderRepository implements OrderRepositoryInterface
         }
     }
 
-    public function findAll(): array
+    public function findAll(int $page = 1, int $limit = 3): PaginatedOrdersDTO
     {
-        try {
-            $orders = [];
 
-            foreach (Order::all() as $model) {
+        try {
+            $total = Order::count();
+            $offset = ($page - 1) * $limit;
+
+            $models = Order::offset($offset)->limit($limit)->get();
+
+            $orders = [];
+            foreach ($models as $model) {
                 $orders[] = DomainOrder::fromArray($model->toArray());
             }
 
-            return $orders;
+            return new PaginatedOrdersDTO(
+                $orders,
+                $total,
+                $page,
+                $limit
+            );
         } catch (QueryException) {
             throw new RepositoryException('Falha ao consultar os pedidos.');
         }

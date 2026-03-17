@@ -11,7 +11,7 @@ class OrderNotificationMail extends Mailable
 {
     public function __construct(
         public readonly Order $order,
-        public readonly string $notificationMessage,
+        public readonly string $notification_message,
     ) {}
 
     public function envelope(): Envelope

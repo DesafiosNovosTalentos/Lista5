@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Domain\NotificationLogs\Interfaces\NotificationLogRepositoryInterface;
 use App\Domain\Orders\Interfaces\OrderRepositoryInterface;
-use App\Domain\Users\UserRepositoryInterface;
+use App\Domain\Users\Interfaces\UserRepositoryInterface;
 use App\Infrastructure\Eloquent\NotificationLogRepository;
 use App\Infrastructure\Eloquent\OrderRepository;
 use App\Infrastructure\Eloquent\UserRepository;

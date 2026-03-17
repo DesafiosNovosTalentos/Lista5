@@ -10,33 +10,33 @@ class NotificationLog
 {
     public function __construct(
         private string $id,
-        private string $userId,
-        private string $orderId,
+        private string $user_id,
+        private string $order_id,
         private string $message,
         private NotificationEnum $status,
         private int $attempts,
-        private ?DateTime $createdAt = null,
-        private ?DateTime $updatedAt = null,
-        private ?DateTime $deletedAt = null,
+        private ?DateTime $created_at = null,
+        private ?DateTime $updated_at = null,
+        private ?DateTime $deleted_at = null,
 
     ) {
         $this->setMessage($message);
     }
 
     public static function createNew(
-        string $userId,
-        string $orderId,
+        string $user_id,
+        string $order_id,
         string $message,
         NotificationEnum $status,
         int $attempts,
     ): self {
         return new self(
-            id: Uuid::uuid4()->toString(),
-            userId: $userId,
-            orderId: $orderId,
-            message: $message,
-            status: $status,
-            attempts: $attempts,
+            Uuid::uuid4()->toString(),
+            $user_id,
+            $order_id,
+            $message,
+            $status,
+            $attempts,
         );
     }
 
@@ -60,12 +60,12 @@ class NotificationLog
 
     public function getUserId(): string
     {
-        return $this->userId;
+        return $this->user_id;
     }
 
     public function getOrderId(): string
     {
-        return $this->orderId;
+        return $this->order_id;
     }
 
     public function getMessage(): string
@@ -86,15 +86,15 @@ class NotificationLog
     public static function fromArray(array $data): self
     {
         return new self(
-            id: $data['id'],
-            userId: $data['user_id'],
-            orderId: $data['order_id'],
-            message: $data['message'],
-            status: NotificationEnum::from($data['status']),
-            attempts: $data['attempts'],
-            createdAt: isset($data['created_at']) ? new DateTime($data['created_at']) : null,
-            updatedAt: isset($data['updated_at']) ? new DateTime($data['updated_at']) : null,
-            deletedAt: isset($data['deleted_at']) ? new DateTime($data['deleted_at']) : null,
+            $data['id'],
+            $data['user_id'],
+            $data['order_id'],
+            $data['message'],
+            NotificationEnum::from($data['status']),
+            $data['attempts'],
+            isset($data['created_at']) ? new DateTime($data['created_at']) : null,
+            isset($data['updated_at']) ? new DateTime($data['updated_at']) : null,
+            isset($data['deleted_at']) ? new DateTime($data['deleted_at']) : null,
 
         );
     }
@@ -103,14 +103,14 @@ class NotificationLog
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->userId,
-            'order_id' => $this->orderId,
+            'user_id' => $this->user_id,
+            'order_id' => $this->order_id,
             'message' => $this->message,
             'status' => $this->status->name,
             'attempts' => $this->attempts,
-            'created_at' => $this->createdAt?->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updatedAt?->format('Y-m-d H:i:s'),
-            'deleted_at' => $this->deletedAt?->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            'deleted_at' => $this->deleted_at?->format('Y-m-d H:i:s'),
         ];
     }
 }

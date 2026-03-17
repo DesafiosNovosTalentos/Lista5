@@ -10,18 +10,18 @@ use App\Jobs\SendOrderNotificationJob;
 class CreateOrderUseCase
 {
     public function __construct(
-        private OrderRepositoryInterface $orderRepository
+        private OrderRepositoryInterface $order_repository
     ) {}
 
     public function execute(CreateOrderDTO $dto): DomainOrder
     {
         $order = DomainOrder::createNew(
-            userId: $dto->user_id,
-            productName: $dto->product_name,
-            amount: $dto->amount,
+            $dto->user_id,
+            $dto->product_name,
+            $dto->amount,
         );
 
-        $order = $this->orderRepository->save($order);
+        $order = $this->order_repository->save($order);
 
         SendOrderNotificationJob::dispatch($order);
 

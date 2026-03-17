@@ -8,8 +8,8 @@ class ListOrdersUseCase
 {
     public function __construct(private OrderRepositoryInterface $order_repository) {}
 
-    public function execute()
+    public function execute(int $page = 1, int $limit = 3)
     {
-        return $this->order_repository->findAll();
+        return $this->order_repository->findAll($page, $limit);
     }
 }

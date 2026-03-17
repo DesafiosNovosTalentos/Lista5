@@ -7,10 +7,8 @@ use App\Domain\NotificationLogs\Enum\NotificationEnum;
 use App\Domain\NotificationLogs\Interfaces\NotificationLogRepositoryInterface;
 use App\Domain\Orders\Entity\Order as DomainOrder;
 use App\Domain\Orders\Interfaces\OrderRepositoryInterface;
-use App\Domain\Users\UserRepositoryInterface;
-
+use App\Domain\Users\Interfaces\UserRepositoryInterface;
 use App\Mail\OrderNotificationMail;
-use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +24,7 @@ class SendOrderNotificationJob implements ShouldQueue
 
     public function __construct(
         private DomainOrder $order,
-        private ?string $notificationLogId = null,
+        private ?string $notification_log_id = null,
     ) {}
 
     public function handle(
@@ -52,17 +50,17 @@ class SendOrderNotificationJob implements ShouldQueue
             $this->order->setStatusCompleted();
             $order_repository->update($this->order);
 
-            if ($this->notificationLogId) {
-                $log = $notification_repository->findById($this->notificationLogId);
+            if ($this->notification_log_id) {
+                $log = $notification_repository->findById($this->notification_log_id);
                 $log->setStatusSent();
                 $notification_repository->update($log);
             } else {
                 $notification_repository->save(DomainNotificationLog::createNew(
-                    userId: $this->order->getUserId(),
-                    orderId: $this->order->getId(),
-                    message: $message,
-                    status: NotificationEnum::SENT,
-                    attempts: $this->tries,
+                    $this->order->getUserId(),
+                    $this->order->getId(),
+                    $message,
+                    NotificationEnum::SENT,
+                    $this->tries,
                 ));
             }
         });
@@ -73,11 +71,11 @@ class SendOrderNotificationJob implements ShouldQueue
         $notification_repository = app(NotificationLogRepositoryInterface::class);
 
         $notification_repository->save(DomainNotificationLog::createNew(
-            userId: $this->order->getUserId(),
-            orderId: $this->order->getId(),
-            message: 'Falha ao enviar notificação: ' . $e->getMessage(),
-            status: NotificationEnum::FAILED,
-            attempts: $this->tries,
+            $this->order->getUserId(),
+            $this->order->getId(),
+            'Falha ao enviar notificação: ' . $e->getMessage(),
+            NotificationEnum::FAILED,
+            $this->tries,
         ));
     }
 }

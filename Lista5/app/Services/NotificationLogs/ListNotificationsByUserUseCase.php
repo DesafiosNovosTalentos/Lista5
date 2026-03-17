@@ -10,8 +10,8 @@ class ListNotificationsByUserUseCase
         private NotificationLogRepositoryInterface $repository
     ) {}
 
-    public function execute(string $userId): array
+    public function execute(string $user_id): array
     {
-        return $this->repository->findByUserId($userId);
+        return $this->repository->findByUserId($user_id);
     }
 }

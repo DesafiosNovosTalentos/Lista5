@@ -2,8 +2,7 @@
 
 namespace App\Services\Auth;
 
-use App\Domain\Users\UserRepositoryInterface;
-use Illuminate\Support\Facades\DB;
+use App\Domain\Users\Interfaces\UserRepositoryInterface;
 
 class RegisterUseCase
 {
@@ -11,16 +10,13 @@ class RegisterUseCase
 
     public function execute(array $data)
     {
+        $user = $this->user_repository->create($data);
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return DB::transaction(function () use ($data) {
-            $user = $this->user_repository->create($data);
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return [
-                'user' => $user,
-                'token' => $token,
-                'token_type' => 'Bearer',
-            ];
-        });
+        return [
+            'user' => $user,
+            'token' => $token,
+            'token_type' => 'Bearer',
+        ];
     }
 }

@@ -68,7 +68,7 @@
         </div>
         
         <div class="email-body">
-            <p>{{ $notificationMessage }}</p>
+            <p>{{ $notification_message }}</p>
             
             <div class="order-box">
                 <p><strong>Produto:</strong> {{ $order->getProductName() }}</p>

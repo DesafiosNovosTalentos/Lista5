@@ -11,26 +11,26 @@ class Order
 {
     public function __construct(
         private string $id,
-        private string $userId,
-        private string $productName,
+        private string $user_id,
+        private string $product_name,
         private int $amount,
         private OrderEnum $status,
-        private ?DateTime $createdAt = null,
-        private ?DateTime $updatedAt = null,
-        private ?DateTime $deletedAt = null,
+        private ?DateTime $created_at = null,
+        private ?DateTime $updated_at = null,
+        private ?DateTime $deleted_at = null,
     ) {
-        $this->setProductName($productName);
+        $this->setProductName($product_name);
         $this->setAmount($amount);
     }
 
-    public static function createNew(string $userId, string $productName, int $amount): self
+    public static function createNew(string $user_id, string $product_name, int $amount): self
     {
         return new self(
-            id: Uuid::uuid4()->toString(),
-            userId: $userId,
-            productName: $productName,
-            amount: $amount,
-            status: OrderEnum::PENDING
+            Uuid::uuid4()->toString(),
+            $user_id,
+            $product_name,
+            $amount,
+            OrderEnum::PENDING
         );
     }
 
@@ -42,17 +42,17 @@ class Order
         $this->amount = $amount;
     }
 
-    private function setProductName(string $productName): void
+    private function setProductName(string $product_name): void
     {
-        if (empty(trim($productName))) {
+        if (empty(trim($product_name))) {
             throw new InvalidArgumentException('O nome do produto não pode ser vazio.');
         }
-        $this->productName = $productName;
+        $this->product_name = $product_name;
     }
 
-    public function update(string $productName, int $amount): void
+    public function update(string $product_name, int $amount): void
     {
-        $this->setProductName($productName);
+        $this->setProductName($product_name);
         $this->setAmount($amount);
     }
 
@@ -73,12 +73,12 @@ class Order
 
     public function getUserId(): string
     {
-        return $this->userId;
+        return $this->user_id;
     }
 
     public function getProductName(): string
     {
-        return $this->productName;
+        return $this->product_name;
     }
 
     public function getAmount(): int
@@ -93,30 +93,30 @@ class Order
 
     public function getCreatedAt(): ?DateTime
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     public function getUpdatedAt(): ?DateTime
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     public function getDeletedAt(): ?DateTime
     {
-        return $this->deletedAt;
+        return $this->deleted_at;
     }
 
     public function toArray(): array
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->userId,
-            'product_name' => $this->productName,
+            'user_id' => $this->user_id,
+            'product_name' => $this->product_name,
             'amount' => $this->amount,
             'status' => $this->status->name,
-            'created_at' => $this->createdAt?->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updatedAt?->format('Y-m-d H:i:s'),
-            'deleted_at' => $this->deletedAt?->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            'deleted_at' => $this->deleted_at?->format('Y-m-d H:i:s'),
         ];
     }
 

@@ -11,16 +11,16 @@ use Illuminate\Database\QueryException;
 
 class NotificationLogRepository implements NotificationLogRepositoryInterface
 {
-    public function save(DomainNotificationLog $notificationLog): DomainNotificationLog
+    public function save(DomainNotificationLog $notification_log): DomainNotificationLog
     {
         try {
             $model = NotificationLog::create([
-                'id' => $notificationLog->getId(),
-                'user_id' => $notificationLog->getUserId(),
-                'order_id' => $notificationLog->getOrderId(),
-                'message' => $notificationLog->getMessage(),
-                'status' => $notificationLog->getStatus(),
-                'attempts' => $notificationLog->getAttempts(),
+                'id' => $notification_log->getId(),
+                'user_id' => $notification_log->getUserId(),
+                'order_id' => $notification_log->getOrderId(),
+                'message' => $notification_log->getMessage(),
+                'status' => $notification_log->getStatus(),
+                'attempts' => $notification_log->getAttempts(),
             ]);
 
             return DomainNotificationLog::fromArray($model->toArray());
@@ -29,10 +29,10 @@ class NotificationLogRepository implements NotificationLogRepositoryInterface
         }
     }
 
-    public function findByUserId(string $userId): array
+    public function findByUserId(string $user_id): array
     {
         try {
-            $logs = NotificationLog::where('user_id', $userId)
+            $logs = NotificationLog::where('user_id', $user_id)
                 ->latest()
                 ->get();
 
@@ -64,15 +64,15 @@ class NotificationLogRepository implements NotificationLogRepositoryInterface
         }
     }
 
-    public function update(DomainNotificationLog $notificationLog): DomainNotificationLog
+    public function update(DomainNotificationLog $notification_log): DomainNotificationLog
     {
         try {
-            NotificationLog::where('id', $notificationLog->getId())->update([
-                'status' => $notificationLog->getStatus(),
-                'attempts' => $notificationLog->getAttempts(),
+            NotificationLog::where('id', $notification_log->getId())->update([
+                'status' => $notification_log->getStatus(),
+                'attempts' => $notification_log->getAttempts(),
             ]);
 
-            return $notificationLog;
+            return $notification_log;
         } catch (QueryException) {
             throw new RepositoryException('Falha ao atualizar o log de notificação.');
         }

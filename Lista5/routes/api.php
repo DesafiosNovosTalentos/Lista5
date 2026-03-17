@@ -12,6 +12,10 @@ Route::prefix('/auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
 
+    Route::prefix('auth')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
+
     Route::prefix('/orders')->group(function () {
         Route::post('/', [OrderController::class, 'store']);
         Route::get('/', [OrderController::class, 'index']);
@@ -20,9 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [OrderController::class, 'delete']);
     });
 
-    Route::prefix('auth')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
+    Route::prefix('notifications')->group(function () {
+        Route::get('/{userId}', [NotificationLogController::class, 'index']);
     });
-
-    Route::get('/users/{userId}/notifications', [NotificationLogController::class, 'index']);
 });
