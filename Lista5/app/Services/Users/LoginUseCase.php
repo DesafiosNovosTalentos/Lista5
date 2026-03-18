@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Auth;
+namespace App\Services\Users;
 
 use App\Domain\Users\Interfaces\UserRepositoryInterface;
 use App\Exceptions\InvalidCredentialsException;

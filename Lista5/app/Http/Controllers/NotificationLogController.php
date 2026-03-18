@@ -15,6 +15,6 @@ class NotificationLogController extends Controller
             $data[] = $log->toArray();
         }
 
-        return response()->json($data);
+        return response()->json($data, 200);
     }
 }

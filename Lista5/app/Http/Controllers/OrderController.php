@@ -43,7 +43,6 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request, CreateOrderUseCase $use_case)
     {
-
         $dto = new CreateOrderDTO(
             $request->user()->id,
             $request->validated('product_name'),

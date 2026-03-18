@@ -44,7 +44,7 @@ class OrderRepository implements OrderRepositoryInterface
         }
     }
 
-    public function findAll(int $page = 1, int $limit = 3): PaginatedOrdersDTO
+    public function findAll(int $page, int $limit): PaginatedOrdersDTO
     {
 
         try {
@@ -73,7 +73,6 @@ class OrderRepository implements OrderRepositoryInterface
     {
         try {
             Order::where('id', $order->getId())->update([
-                'user_id' => $order->getUserId(),
                 'product_name' => $order->getProductName(),
                 'amount' => $order->getAmount(),
                 'status' => $order->getStatus(),

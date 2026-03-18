@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Domain\NotificationLogs\Enum\NotificationEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NotificationLog extends Model
@@ -23,12 +24,12 @@ class NotificationLog extends Model
         'attempts',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function order()
+    public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'order_id');
     }

@@ -11,7 +11,7 @@ interface OrderRepositoryInterface
 
     public function findById(string $id): ?Order;
 
-    public function findAll(int $page = 1, int $limit = 3): PaginatedOrdersDTO;
+    public function findAll(int $page, int $limit): PaginatedOrdersDTO;
 
     public function delete(string $id): void;
 

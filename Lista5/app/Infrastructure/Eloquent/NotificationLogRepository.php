@@ -63,33 +63,4 @@ class NotificationLogRepository implements NotificationLogRepositoryInterface
             throw new RepositoryException('Falha ao consultar notificações com falha.');
         }
     }
-
-    public function update(DomainNotificationLog $notification_log): DomainNotificationLog
-    {
-        try {
-            NotificationLog::where('id', $notification_log->getId())->update([
-                'status' => $notification_log->getStatus(),
-                'attempts' => $notification_log->getAttempts(),
-            ]);
-
-            return $notification_log;
-        } catch (QueryException) {
-            throw new RepositoryException('Falha ao atualizar o log de notificação.');
-        }
-    }
-
-    public function findById(string $id): ?DomainNotificationLog
-    {
-        try {
-            $model = NotificationLog::find($id);
-
-            if (! $model) {
-                return null;
-            }
-
-            return DomainNotificationLog::fromArray($model->toArray());
-        } catch (QueryException) {
-            throw new RepositoryException('Falha ao consultar o log de notificação.');
-        }
-    }
 }

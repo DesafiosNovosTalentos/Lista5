@@ -48,11 +48,6 @@ class NotificationLog
         $this->message = $message;
     }
 
-    public function setStatusSent(): void
-    {
-        $this->status = NotificationEnum::SENT;
-    }
-
     public function getId(): string
     {
         return $this->id;
@@ -106,7 +101,7 @@ class NotificationLog
             'user_id' => $this->user_id,
             'order_id' => $this->order_id,
             'message' => $this->message,
-            'status' => $this->status->name,
+            'status' => $this->status->value,
             'attempts' => $this->attempts,
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),

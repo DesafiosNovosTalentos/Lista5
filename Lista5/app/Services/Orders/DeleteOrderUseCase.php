@@ -9,7 +9,7 @@ class DeleteOrderUseCase
 {
     public function __construct(private OrderRepositoryInterface $order_repository) {}
 
-    public function execute(string $order_id)
+    public function execute(string $order_id): void
     {
         $order = $this->order_repository->findById($order_id);
 

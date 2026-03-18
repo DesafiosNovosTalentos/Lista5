@@ -21,28 +21,27 @@ class UserRepository implements UserRepositoryInterface
     public function findByEmail(string $email): ?User
     {
         try {
-            $user = User::where('email', $email)->first();
-            if (! $user) {
-                return null;
-            }
-
-            return $user;
+            return User::where('email', $email)->first();
         } catch (QueryException) {
-            throw new RepositoryException('Falha ao encontrar o email.');
+            throw new RepositoryException('Falha ao encontrar o usuário por email.');
         }
     }
 
     public function findById(string $id): ?User
     {
         try {
-            $user = User::find($id);
-            if (! $user) {
-                return null;
-            }
-
-            return $user;
+            return User::find($id);
         } catch (QueryException) {
             throw new RepositoryException('Falha ao encontrar o usuário.');
+        }
+    }
+
+    public function findAll(): array
+    {
+        try {
+            return User::all()->toArray();
+        } catch (QueryException) {
+            throw new RepositoryException('Falha ao listar usuários.');
         }
     }
 }

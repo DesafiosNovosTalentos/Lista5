@@ -91,21 +91,6 @@ class Order
         return $this->status;
     }
 
-    public function getCreatedAt(): ?DateTime
-    {
-        return $this->created_at;
-    }
-
-    public function getUpdatedAt(): ?DateTime
-    {
-        return $this->updated_at;
-    }
-
-    public function getDeletedAt(): ?DateTime
-    {
-        return $this->deleted_at;
-    }
-
     public function toArray(): array
     {
         return [
@@ -113,7 +98,7 @@ class Order
             'user_id' => $this->user_id,
             'product_name' => $this->product_name,
             'amount' => $this->amount,
-            'status' => $this->status->name,
+            'status' => $this->status->value,
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
             'deleted_at' => $this->deleted_at?->format('Y-m-d H:i:s'),

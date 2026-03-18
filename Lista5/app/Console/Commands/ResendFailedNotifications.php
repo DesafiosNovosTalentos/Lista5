@@ -25,20 +25,20 @@ class ResendFailedNotifications extends Command
             return;
         }
 
-        $this->info(count($failed) . ' notificação(ões) encontrada(s). Reenviando...');
+        $this->info(count($failed).' notificação(ões) encontrada(s). Reenviando...');
 
         foreach ($failed as $log) {
-            $order = $order_repository->findById($log->getOrderId());
+            $order_id = $log->getOrderId();
+            $order = $order_repository->findById($order_id);
 
             if ($order === null) {
-                $this->warn("Pedido {$log->getOrderId()} não encontrado. Pulando.");
+                $this->warn("Pedido {$order_id} não encontrado. Pulando.");
 
                 continue;
             }
 
-            SendOrderNotificationJob::dispatch($order, $log->getId());
-
-            $this->line("Job despachado para o pedido {$log->getOrderId()}");
+            SendOrderNotificationJob::dispatch($order);
+            $this->line("Job despachado para o pedido {$order_id}.");
         }
 
         $this->info('Concluído.');
