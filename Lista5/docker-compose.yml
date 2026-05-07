@@ -1,0 +1,24 @@
+services:
+  laravel-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: desafio1-api:latest
+    container_name: laravel-api
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+    volumes:
+      - storage-data:/var/www/html/storage/app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  storage-data:
+    driver: local
