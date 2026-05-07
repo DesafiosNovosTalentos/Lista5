@@ -3,7 +3,14 @@ set -e
 
 cd /var/www/html
 
-echo "==> Limpando caches antigos..."
+echo "==> Removendo caches contaminados..."
+rm -f bootstrap/cache/packages.php \
+      bootstrap/cache/services.php \
+      bootstrap/cache/config.php \
+      bootstrap/cache/routes-v7.php \
+      bootstrap/cache/events.php
+
+echo "==> Limpando caches do Laravel..."
 php artisan config:clear || true
 php artisan cache:clear || true
 php artisan route:clear || true
@@ -17,6 +24,9 @@ for i in {1..30}; do
     echo "    Tentativa $i/30..."
     sleep 1
 done
+
+echo "==> Regenerando cache de pacotes (sem dev deps)..."
+php artisan package:discover --ansi || true
 
 echo "==> Rodando migrations..."
 php artisan migrate --force || echo "Migrate falhou ou já estava em dia"
