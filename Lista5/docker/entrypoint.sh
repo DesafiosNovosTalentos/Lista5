@@ -16,13 +16,13 @@ php artisan cache:clear || true
 php artisan route:clear || true
 
 echo "==> Aguardando banco de dados em $DB_HOST:$DB_PORT..."
-for i in {1..30}; do
+for i in {1..60}; do
     if php -r "try { new PDO('pgsql:host=$DB_HOST;port=$DB_PORT;dbname=$DB_DATABASE', '$DB_USERNAME', '$DB_PASSWORD'); echo 'OK'; } catch (Exception \$e) { exit(1); }" 2>/dev/null | grep -q OK; then
         echo "==> Banco respondeu!"
         break
     fi
-    echo "    Tentativa $i/30..."
-    sleep 1
+    echo "    Tentativa $i/60..."
+    sleep 2
 done
 
 echo "==> Regenerando cache de pacotes (sem dev deps)..."

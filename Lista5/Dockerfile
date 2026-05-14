@@ -42,8 +42,7 @@ RUN rm -f bootstrap/cache/packages.php \
           bootstrap/cache/routes-v7.php \
           bootstrap/cache/events.php
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts \
-    && composer dump-autoload --optimize --no-dev
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
