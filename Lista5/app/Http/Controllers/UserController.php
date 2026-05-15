@@ -15,6 +15,7 @@ class UserController extends Controller
     public function register(RegisterAuthRequest $request, RegisterUseCase $use_case)
     {
         $data = $request->validated();
+        $data['name'] = strip_tags($data['name']);
         $response = $use_case->execute($data);
 
         return response()->json($response, 201);

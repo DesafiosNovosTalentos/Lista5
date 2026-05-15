@@ -23,8 +23,15 @@ class UpdateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_name' => ['required', 'string'],
+            'product_name' => ['required', 'string', 'max:255'],
             'amount' => ['required', 'integer', 'min:1'],
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'product_name' => strip_tags($this->product_name ?? ''),
+        ]);
     }
 }

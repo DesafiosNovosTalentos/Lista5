@@ -45,7 +45,7 @@ class OrderController extends Controller
     {
         $dto = new CreateOrderDTO(
             $request->user()->id,
-            $request->validated('product_name'),
+            strip_tags($request->validated('product_name')),
             $request->validated('amount'),
         );
 
@@ -65,7 +65,7 @@ class OrderController extends Controller
     {
         $dto = new UpdateOrderDTO(
             $id,
-            $request->validated('product_name'),
+            strip_tags($request->validated('product_name')),
             $request->validated('amount')
         );
 
